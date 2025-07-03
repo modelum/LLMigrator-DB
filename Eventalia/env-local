@@ -1,0 +1,30 @@
+# ──────── BASE DE DATOS MYSQL ────────
+SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/eventos?serverTimezone=CET
+SPRING_DATASOURCE_USERNAME=root
+SPRING_DATASOURCE_PASSWORD=practicas
+
+# ──────── BASE DE DATOS MONGODB ────────
+SPRING_DATA_MONGO_DATABASE=arso
+SPRING_DATA_MONGODB_URI=mongodb://root:practicas@mongo-db:27017/arso?authSource=admin
+
+# ──────── RABBITMQ ────────
+RABBITMQ_URI=amqp://arso:practicas@rabbitmq:5672
+
+# ──────── APIS INTERNAS ────────
+RESERVAS_API=http://reservas-app:8082
+EVENTOS_API=http://eventos-app:8081
+
+# ---------- GATEWAY ROUTES -----------
+
+GATEWAY_PORT=8090
+ESPACIOS_ROUTE=http://espacios-app:8080/api/espacios
+EVENTOS_ROUTE=http://eventos-app:8081/api/eventos
+RESERVAS_ROUTE=http://reservas-app:8082/api/reservas
+
+# ---------- GITHUB OAUTH -----------
+
+GITHUB_CLIENT_ID=tu-client-id
+GITHUB_CLIENT_SECRET=tu-client-secret
+
+# -------------- MY SECRET KEY ----------------
+SECRET_KEY=tu-secret-key

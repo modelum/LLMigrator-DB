@@ -1,0 +1,136 @@
+services:
+  gateway-app:
+    build: ./gateway
+    container_name: gateway-app
+    restart: always
+    ports:
+      - '8090:8090'
+    depends_on:
+      eventos-app:
+        condition: service_started
+      reservas-app:
+        condition: service_started
+      espacios-app:
+        condition: service_started
+      mysql-db:
+        condition: service_healthy
+        restart: true
+      postgres:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+  espacios-app:
+    build: ./espacios
+    container_name: espacios-app
+    restart: always
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+  eventos-app:
+    build: ./eventos
+    container_name: eventos-app
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+
+  reservas-app:
+    build: ./reservas
+    container_name: reservas-app
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./.mysql-data:/var/lib/mysql
+      - ./.mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: practicas
+    networks:
+      - arso-net
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env
+    volumes:
+      - ./.postgres-init/init-multiple-dbs.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./.postgres-data:/var/lib/postgresql/data
+    networks:
+      - arso-net
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: arso
+      RABBITMQ_DEFAULT_PASS: practicas
+    volumes:
+      - ./.rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - arso-net
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', 'check_protocol_listener', 'amqp']
+      interval: 15s
+      timeout: 10s
+      retries: 7
+      start_period: 10s
+
+networks:
+  arso-net:
+    driver: bridge

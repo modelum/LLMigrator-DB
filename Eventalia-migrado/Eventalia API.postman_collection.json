@@ -1,0 +1,1580 @@
+{
+	"info": {
+		"_postman_id": "9ff2f8cf-84d5-43df-a4a0-c7add6a942da",
+		"name": "Eventalia API",
+		"description": "> En esta documentación presentamos todas las operaciones disponibles en nuestra arquitectura de microservicios desarrollada en Java Spring Boot entre Antonio Pérez Serrano y Fabián Sola Durán \n  \n\nPrevio a realizar cualquier prueba ejecutar\n\n``` bash\ndocker compose up -d\n\n ```\n\n### **Gateway**\n\nTodas las pruebas a realizar se van a realizar con el uso del gateway.\n\n### Servicio espacios\n\nTodas las pruebas a realizar con el servicio espacios se pueden encontrar en la carpeta Espacios-API.\n\n### Servicio eventos\n\nTodas las pruebas a realizar con el servicio eventos se pueden encontrar en la carpeta Eventos-API.\n\n### Servicio reservas\n\nTodas las pruebas a realizar con el servicio espacio se pueden encontrar en la carpeta Reservas-API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36968954",
+		"_collection_link": "https://arso-equipo1.postman.co/workspace/Arso~d52a83dc-c2d0-4cd1-9085-e5bde5c2cce8/collection/36968954-9ff2f8cf-84d5-43df-a4a0-c7add6a942da?action=share&source=collection_link&creator=36968954"
+	},
+	"item": [
+		{
+			"name": "1-Gateway",
+			"item": [
+				{
+					"name": "login gestor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token_jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "gestor",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "gestor",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{puerto3}}/auth/login",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token_jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "usuario",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "usuario",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{puerto3}}/auth/login",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"token_jwt\", pm.response.json().token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Origin",
+								"value": "http://localhost:4200",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{url}}{{puerto3}}/auth/logout",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oauth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8090/oauth2/authorization/github",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8090",
+							"path": [
+								"oauth2",
+								"authorization",
+								"github"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2-Espacios-API",
+			"item": [
+				{
+					"name": "modificarEspacio",
+					"item": [
+						{
+							"name": "modificarEspacioFisicoNombre",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nombre\": \"Cambio de prueba\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEspacio}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "modificarEspacioFisicoDescripción",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descripcion\": \"Cambio de descripcion\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEspacio}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "modificarEspacioFisicoCapacidad",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"capacidad\": 200\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEspacio}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "cambiarEstadoFisico",
+					"item": [
+						{
+							"name": "cambiarEstadoFisicoActivo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "estado",
+											"value": "activo",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios/:id/estado",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios",
+										":id",
+										"estado"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEspacio}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cambiarEstadoFisicoCerrado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token_jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "estado",
+											"value": "cerrado",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios/:id/estado",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios",
+										":id",
+										"estado"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEspacio}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "darAltaEspacios",
+					"item": [
+						{
+							"name": "dar alta espacio físico",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text();\r",
+											"\r",
+											"if(response){\r",
+											"    pm.environment.set(\"idEspacio\", response.trim());\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nombre\": \"Espacio de prueba 2\",\r\n  \"propietario\": \"gestor\",\r\n  \"capacidad\": 110,\r\n  \"direccionPostal\": \"Calle Falsa 123, Ciudad Ejemplo\",\r\n  \"longitud\": -58.3816,\r\n  \"latitud\": -34.6037,\r\n  \"descripcion\": \"Un espacio ideal para conferencias y reuniones.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "dar alta espacio físico Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"idEspacio\", pm.response.json().token);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nombre\": \"\",\r\n  \"propietario\": \"Juan\",\r\n  \"capacidad\": 50,\r\n  \"direccionPostal\": \"Calle Falsa 123, Ciudad Ejemplo\",\r\n  \"longitud\": -58.3816,\r\n  \"latitud\": -34.6037,\r\n  \"descripcion\": \"Un espacio ideal para conferencias y reuniones.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "recuperarEspacioFisico",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/espacios/:id",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"espacios",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{idEspacio}}",
+									"description": "espacio's id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findEspaciosFisicosDePropietario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/espacios?propietario=gestor",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"espacios"
+							],
+							"query": [
+								{
+									"key": "propietario",
+									"value": "gestor"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findEspaciosFisicosLibres",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/espacios/libres?fechaInicio=2025-06-01T09:00:00&fechaFin=2025-06-01T11:00:00&capacidadRequerida=10",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"espacios",
+								"libres"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2025-06-01T09:00:00"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2025-06-01T11:00:00"
+								},
+								{
+									"key": "capacidadRequerida",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "añadirPuntosInteres",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token_jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"puntos\": [\r\n    {\r\n      \"nombre\": \"Torre Eiffel\",\r\n      \"descripcion\": \"Famosa torre de hierro en París, Francia.\",\r\n      \"distancia\": 2.5,\r\n      \"url\": \"https://www.toureiffel.paris/\"\r\n    },\r\n    {\r\n      \"nombre\": \"Gran Muralla China\",\r\n      \"descripcion\": \"Antigua muralla defensiva que se extiende por China.\",\r\n      \"distancia\": 8.9,\r\n      \"url\": \"https://www.chinahighlights.com/greatwall/\"\r\n    },\r\n    {\r\n      \"nombre\": \"Machu Picchu\",\r\n      \"descripcion\": \"Ciudadela inca en los Andes peruanos.\",\r\n      \"distancia\": 5.2,\r\n      \"url\": \"https://www.machupicchu.gob.pe/\"\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}{{puerto3}}/espacios/:id/puntosinteres",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"espacios",
+								":id",
+								"puntosinteres"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{idEspacio}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recuperarEspaciosFisicos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/espacios",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"espacios"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "mockup",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/espacios",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"espacios"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 23 Apr 2025 15:30:23 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"espacio\": [\n        {\n            \"url\": \"http://espacios-app:8080/api/espacios/d27869dc-d5a4-42a6-acdb-6ae8951683ea\",\n            \"resumen\": {\n                \"id\": \"d27869dc-d5a4-42a6-acdb-6ae8951683ea\",\n                \"nombre\": \"Sala de conferencias 1\",\n                \"capacidad\": 110,\n                \"direccion\": \"Calle Falsa 123, Ciudad Ejemplo\",\n                \"descripcion\": \"Un espacio ideal para conferencias y reuniones.\",\n                \"estado\": \"ACTIVO\"\n            }\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "3-Eventos-API",
+			"item": [
+				{
+					"name": "darAltaEvento",
+					"item": [
+						{
+							"name": "Dar alta evento",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let locationHeader = pm.response.headers.get(\"Location\");\r",
+											"\r",
+											"if (locationHeader) {\r",
+											"    let match = locationHeader.match(/\\/([^\\/]+)$/);\r",
+											"    if(match){\r",
+											"        pm.environment.set(\"idEvento\", match[1]);\r",
+											"    }\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"nombre\": \"Evento de prueba para el front 6\",\r\n  \"descripcion\": \"Concierto funk en el parque\",\r\n  \"organizador\": \"Mi casa\",\r\n  \"categoria\": \"CULTURAL\",\r\n  \"fechaInicio\": \"2029-09-21T20:00:00\",\r\n  \"fechaFin\": \"2029-09-27T22:00:00\",\r\n  \"plazas\": 50,\r\n  \"idEspacioFisico\": {{idEspacio}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "modificarEvento",
+					"item": [
+						{
+							"name": "modificarDescripcion",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"descripcion\": \"Nueva descripcion realizada\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "prueba front",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"plazas\": 4,\r\n    \"descripcion\": \"Concierto funk en el parque\",\r\n    \"fechaInicio\": \"2025-10-21T18:00:00\",\r\n    \"fechaFin\": \"2025-10-27T21:00:00\",\r\n    \"idEspacioFisico\": \"{{idEspacio}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "modificarFechaInicio",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"fechaInicio\": \"2025-06-01T21:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "modificarFechaFin",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"fechaFin\": \"2025-06-01T23:00:00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "modificarPlazas",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"plazas\": 100\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "modificarIdEspacio",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idEspacioFisico\": \"{{idEspacio}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos/:id",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "cancelarEvento",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/eventos/:id/estado",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"eventos",
+								":id",
+								"estado"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{idEvento}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventosDelMes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/eventos/fechas?anio=2025&mes=6",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"eventos",
+								"fechas"
+							],
+							"query": [
+								{
+									"key": "anio",
+									"value": "2025"
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "nombre,asc",
+									"disabled": true
+								},
+								{
+									"key": "mes",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recuperarEvento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/eventos/:id",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"eventos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{idEvento}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getEventos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/eventos",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"eventos"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "mockup",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/eventos",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"eventos"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "JSESSIONID=E36988AC7F2E5EFD5F088046CE6EA8C1; Path=/; HttpOnly"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 24 Apr 2025 10:06:30 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/hal+json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"_embedded\": {\n        \"eventoDTOList\": [\n            {\n                \"id\": \"6e42519b-e497-46e0-a101-88d74125b23f\",\n                \"nombre\": \"Concierto Funky 1\",\n                \"descripcion\": \"Concierto funk en el parque\",\n                \"organizador\": \"Ayuntamiento de Murcia\",\n                \"numPlazas\": 3,\n                \"cancelado\": false,\n                \"categoria\": \"CULTURAL\",\n                \"ocupacion\": {\n                    \"fechaInicio\": \"2025-04-15T20:00:00\",\n                    \"fechaFin\": \"2025-04-20T22:00:00\",\n                    \"idEspacioFisico\": \"d27869dc-d5a4-42a6-acdb-6ae8951683ea\"\n                },\n                \"_links\": {\n                    \"self\": {\n                        \"href\": \"http://eventos-app:8081/api/eventos/6e42519b-e497-46e0-a101-88d74125b23f\"\n                    }\n                }\n            },\n            {\n                \"id\": \"919637c1-1503-4e0d-a2a6-751e773623a8\",\n                \"nombre\": \"Concierto Funky 2\",\n                \"descripcion\": \"Concierto funk en el parque\",\n                \"organizador\": \"Ayuntamiento de Murcia\",\n                \"numPlazas\": 3,\n                \"cancelado\": true,\n                \"categoria\": \"CULTURAL\",\n                \"ocupacion\": null,\n                \"_links\": {\n                    \"self\": {\n                        \"href\": \"http://eventos-app:8081/api/eventos/919637c1-1503-4e0d-a2a6-751e773623a8\"\n                    }\n                }\n            },\n            {\n                \"id\": \"de25ab82-0cb6-4d41-8147-7d60f3d1e123\",\n                \"nombre\": \"Concierto Funky 2\",\n                \"descripcion\": \"Concierto funk en el parque\",\n                \"organizador\": \"Ayuntamiento de Murcia\",\n                \"numPlazas\": 3,\n                \"cancelado\": false,\n                \"categoria\": \"CULTURAL\",\n                \"ocupacion\": {\n                    \"fechaInicio\": \"2025-05-15T20:00:00\",\n                    \"fechaFin\": \"2025-05-20T22:00:00\",\n                    \"idEspacioFisico\": \"6bcee93b-d1cf-478f-a7bf-39ea5b85eb48\"\n                },\n                \"_links\": {\n                    \"self\": {\n                        \"href\": \"http://eventos-app:8081/api/eventos/de25ab82-0cb6-4d41-8147-7d60f3d1e123\"\n                    }\n                }\n            }\n        ]\n    },\n    \"_links\": {\n        \"self\": {\n            \"href\": \"http://eventos-app:8081/api/eventos\"\n        }\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "4-Reservas-API",
+			"item": [
+				{
+					"name": "Crear reserva",
+					"item": [
+						{
+							"name": "Crear reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let locationHeader = pm.response.headers.get(\"Location\");\r",
+											"\r",
+											"if (locationHeader) {\r",
+											"    let match = locationHeader.match(/\\/([^\\/]+)$/);\r",
+											"    if(match){\r",
+											"        pm.environment.set(\"idReserva\", match[1]);\r",
+											"    }\r",
+											"}"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idEvento\": \"{{idEvento}}\",\r\n  \"idUsuario\": \"0dab57d4-6c56-4f77-94ea-7ab72927659f\",\r\n  \"plazasReservadas\": 30\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "crear reserva con evento que no existe",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idEvento\": \"55e4a2d3-7dc5-4d0f-8b29-3f4d77e49cf6\",\r\n  \"idUsuario\": \"987e6543-b21a-34c7-d890-56781234abcd\",\r\n  \"plazasReservadas\": 4\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear reserva bad request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"idEvento\": \"55e4a2d3-7dc5-4d0f-8b29-3f779c8f6\",\r\n  \"idUsuario\": \"987e6543-b21a-34c7-d890-56724abcd\",\r\n  \"plazasReservadas\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Obtener una reserva",
+					"item": [
+						{
+							"name": "Obtener reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas/:idReserva",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas",
+										":idReserva"
+									],
+									"variable": [
+										{
+											"key": "idReserva",
+											"value": "{{idReserva}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener reserva Bad Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas/:idReserva",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas",
+										":idReserva"
+									],
+									"variable": [
+										{
+											"key": "idReserva",
+											"value": "asdfadfasfasdfasdfasdf"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener reserva not found",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas/:idReserva",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas",
+										":idReserva"
+									],
+									"variable": [
+										{
+											"key": "idReserva",
+											"value": "406ab108-3ec9-443e-a621-d1c356a88b3d"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Obtener reservas dado un evento",
+					"item": [
+						{
+							"name": "Obtener las reservas de un evento",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas/eventos/:idEvento",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas",
+										"eventos",
+										":idEvento"
+									],
+									"variable": [
+										{
+											"key": "idEvento",
+											"value": "{{idEvento}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener las reservas de un evento no existente",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas/eventos/:idEvento",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas",
+										"eventos",
+										":idEvento"
+									],
+									"variable": [
+										{
+											"key": "idEvento",
+											"value": "13ba6e76-b42c-4e6c-a8db-1664969288f8"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Obtener las reservas de un evento con UUID no válido",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}{{puerto3}}/reservas/eventos/:idEvento",
+									"host": [
+										"{{url}}{{puerto3}}"
+									],
+									"path": [
+										"reservas",
+										"eventos",
+										":idEvento"
+									],
+									"variable": [
+										{
+											"key": "idEvento",
+											"value": "asdfasdfqewfqrg34564537a"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "obtener reservas de un usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/reservas/usuarios/:idUsuario",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"reservas",
+								"usuarios",
+								":idUsuario"
+							],
+							"variable": [
+								{
+									"key": "idUsuario",
+									"value": "1b3efab4-0d0f-4008-97d9-90dcdb7a0c42"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancelación reserva",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{puerto3}}/reservas/:idReserva/cancelacion",
+							"host": [
+								"{{url}}{{puerto3}}"
+							],
+							"path": [
+								"reservas",
+								":idReserva",
+								"cancelacion"
+							],
+							"variable": [
+								{
+									"key": "idReserva",
+									"value": "{{idReserva}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token_jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:",
+			"type": "string"
+		},
+		{
+			"key": "puerto",
+			"value": "8080",
+			"type": "string"
+		},
+		{
+			"key": "puerto1",
+			"value": "8081",
+			"type": "string"
+		},
+		{
+			"key": "puerto2",
+			"value": "8082",
+			"type": "string"
+		}
+	]
+}

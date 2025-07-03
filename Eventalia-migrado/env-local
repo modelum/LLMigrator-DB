@@ -1,0 +1,35 @@
+
+# ──────── BASE DE DATOS POSTGRESQL (para eventos-app) ────────
+SPRING_DATASOURCE_EVENTOS_URL=jdbc:postgresql://postgres:5432/eventosdb
+SPRING_DATASOURCE_EVENTOS_USERNAME=postgres_user
+SPRING_DATASOURCE_EVENTOS_PASSWORD=postgres_password
+
+# ──────── BASE DE DATOS POSTGRESQL (para reservas-app) ────────
+SPRING_DATASOURCE_RESERVAS_URL=jdbc:postgresql://postgres:5432/reservasdb
+SPRING_DATASOURCE_RESERVAS_USERNAME=postgres_user
+SPRING_DATASOURCE_RESERVAS_PASSWORD=postgres_password
+
+# ──────── RABBITMQ ────────
+RABBITMQ_URI=amqp://arso:practicas@rabbitmq:5672
+
+# ──────── APIS INTERNAS ────────
+RESERVAS_API=http://reservas-app:8082
+EVENTOS_API=http://eventos-app:8081
+
+# ---------- GATEWAY ROUTES -----------
+
+GATEWAY_PORT=8090
+ESPACIOS_ROUTE=http://espacios-app:8080/api/espacios
+EVENTOS_ROUTE=http://eventos-app:8081/api/eventos
+RESERVAS_ROUTE=http://reservas-app:8082/api/reservas
+
+# ---------- GITHUB OAUTH -----------
+
+GITHUB_CLIENT_ID=tu-client-id
+GITHUB_CLIENT_SECRET=tu-client-secret
+
+# -------------- MY SECRET KEY ----------------
+SECRET_KEY=tu-secret-key
+
+POSTGRES_USER=postgres_user
+POSTGRES_PASSWORD=postgres_password

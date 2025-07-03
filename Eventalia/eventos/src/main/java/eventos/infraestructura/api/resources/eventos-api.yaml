@@ -1,0 +1,713 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Servicio de Eventos",
+    "description": "Gestión de Eventos",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8081",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/eventos/{id}": {
+      "get": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Recuperar detalles de un evento",
+        "description": "Devuelve los datos de un evento mediante su identificador único.",
+        "operationId": "recuperarEvento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del evento a recuperar",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "El evento solicitado no existe.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Detalles del evento recuperados correctamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventoDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Cancelar un evento",
+        "description": "Permite cancelar un evento existente mediante su identificador.",
+        "operationId": "cancelarEvento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del evento a cancelar",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Formato de identificador no válido.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "El evento a cancelar no existe.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Evento cancelado correctamente"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Modificar un evento existente",
+        "description": "Actualiza la información de un evento, permitiendo modificar su descripción, fechas, plazas o ubicación.",
+        "operationId": "modificarEvento",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del evento a modificar",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModificarEventoDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Solicitud inválida. Formato incorrecto en fechas o identificador.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "El evento a modificar no existe.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Evento modificado correctamente"
+          }
+        }
+      }
+    },
+    "/api/eventos": {
+      "get": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Obtener eventos de un mes específico",
+        "description": "Devuelve la lista de eventos programados para un mes y año determinados.",
+        "operationId": "getEventosDelMes",
+        "parameters": [
+          {
+            "name": "mes",
+            "in": "query",
+            "description": "Número del mes en formato MM",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "anio",
+            "in": "query",
+            "description": "Año en formato YYYY",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Formato de mes/año no válido.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Lista de eventos recuperada correctamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventoDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Registrar un nuevo evento",
+        "description": "Crea un nuevo evento con la información proporcionada.",
+        "operationId": "darAltaEvento",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CrearEventoDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Solicitud inválida. Puede deberse a formato incorrecto en fechas, ID de espacio o categoría.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Evento creado correctamente"
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/eventos/{id}/ocupacion": {
+      "get": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Verificar ocupación activa para un espacio físico",
+        "description": "Devuelve un indicador booleano que especifica si existe una ocupación activa para el espacio físico indicado por su UUID.",
+        "operationId": "isOcupacionActiva",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identificador del espacio físico",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Formato de identificador no válido.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se encontró ocupación activa para el espacio.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Indicador de ocupación activa recuperado correctamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/eventos/espaciosLibres": {
+      "get": {
+        "tags": [
+          "eventos"
+        ],
+        "summary": "Obtener espacios libres con capacidad suficiente",
+        "description": "Devuelve los UUID de los espacios físicos que están activos, tienen capacidad mayor o igual a la indicada y no tienen eventos programados que se solapen con el rango de fechas proporcionado.",
+        "operationId": "getEspaciosSinEventosYCapacidadSuficiente",
+        "parameters": [
+          {
+            "name": "capacidad",
+            "in": "query",
+            "description": "Capacidad mínima requerida",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "fechaInicio",
+            "in": "query",
+            "description": "Fecha y hora de inicio en formato ISO (YYYY-MM-DDTHH:MM:SS)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2021-06-01T20:00:00"
+          },
+          {
+            "name": "fechaFin",
+            "in": "query",
+            "description": "Fecha y hora de fin en formato ISO (YYYY-MM-DDTHH:MM:SS)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2021-06-01T22:00:00"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Solicitud inválida. Puede deberse a formato incorrecto en fechas o en el parámetro de capacidad.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No se encontraron espacios que cumplan las condiciones.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Lista de UUIDs de espacios libres recuperada correctamente",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorDto": {
+        "type": "object",
+        "properties": {
+          "estado": {
+            "type": "string",
+            "description": "El estado del error, usualmente un código de estado HTTP o una descripción breve.",
+            "example": "400"
+          },
+          "titulo": {
+            "type": "string",
+            "description": "Título corto que describe el tipo de error ocurrido.",
+            "example": "Solicitud inválida"
+          },
+          "mensaje": {
+            "type": "string",
+            "description": "Mensaje detallado que explica la causa del error, habitualmente para el desarrollador frontend.",
+            "example": "El número de plazas a reservar debe ser mayor que 0"
+          }
+        },
+        "description": "DTO utilizado para representar un error en la API. Contiene información sobre el estado, título y mensaje del error."
+      },
+      "CrearEventoDto": {
+        "required": [
+          "categoria",
+          "descripcion",
+          "fechaFin",
+          "fechaInicio",
+          "idEspacioFisico",
+          "nombre",
+          "organizador",
+          "plazas"
+        ],
+        "type": "object",
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "description": "Nombre del evento",
+            "example": "Concierto de rock"
+          },
+          "descripcion": {
+            "type": "string",
+            "description": "Descripción del evento",
+            "example": "Concierto de rock en el parque"
+          },
+          "organizador": {
+            "type": "string",
+            "description": "Organizador del evento",
+            "example": "Ayuntamiento de Madrid"
+          },
+          "categoria": {
+            "type": "string",
+            "description": "Categoría del evento",
+            "example": "ENTRETENIMIENTO",
+            "enum": [
+              "ACADEMICO",
+              "CULTURAL",
+              "ENTRETENIMIENTO",
+              "DEPORTES",
+              "OTROS"
+            ]
+          },
+          "fechaInicio": {
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "type": "string",
+            "description": "Fecha de inicio del evento",
+            "example": "2021-06-01T20:00:00"
+          },
+          "fechaFin": {
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "type": "string",
+            "description": "Fecha de fin del evento",
+            "example": "2021-06-01T22:00:00"
+          },
+          "plazas": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Número de plazas disponibles",
+            "format": "int32",
+            "example": 100
+          },
+          "idEspacioFisico": {
+            "type": "string",
+            "description": "Identificador del espacio físico donde se realizará el evento",
+            "format": "uuid",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        },
+        "description": "Datos para crear el evento"
+      },
+      "ModificarEventoDTO": {
+        "type": "object",
+        "properties": {
+          "descripcion": {
+            "type": "string",
+            "description": "Descripción del evento",
+            "example": "Nuevo concierto en la sala principal"
+          },
+          "fechaInicio": {
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "type": "string",
+            "description": "Fecha de inicio del evento",
+            "example": "2025-06-01T20:00:00"
+          },
+          "fechaFin": {
+            "pattern": "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}",
+            "type": "string",
+            "description": "Fecha de fin del evento",
+            "example": "2025-06-01T22:00:00"
+          },
+          "plazas": {
+            "type": "integer",
+            "description": "Número de plazas disponibles",
+            "format": "int32",
+            "example": 200
+          },
+          "idEspacioFisico": {
+            "type": "string",
+            "description": "Identificador del espacio físico donde se realizará el evento",
+            "format": "uuid",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          }
+        },
+        "description": "Datos del evento a modificar"
+      },
+      "Pageable": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/Sort"
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "paged": {
+            "type": "boolean"
+          },
+          "unpaged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Sort": {
+        "type": "object",
+        "properties": {
+          "empty": {
+            "type": "boolean"
+          },
+          "sorted": {
+            "type": "boolean"
+          },
+          "unsorted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EventoDto": {
+        "required": [
+          "cancelado",
+          "categoria",
+          "conOcupacion",
+          "descripcion",
+          "id",
+          "nombre",
+          "numPlazas",
+          "organizador"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador del evento",
+            "format": "uuid",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "nombre": {
+            "type": "string",
+            "description": "Nombre del evento",
+            "example": "Concierto de rock"
+          },
+          "descripcion": {
+            "type": "string",
+            "description": "Descripción del evento",
+            "example": "Concierto de rock en la sala de conciertos de la ciudad"
+          },
+          "organizador": {
+            "type": "string",
+            "description": "Organizador del evento",
+            "example": "Ayuntamiento de la ciudad"
+          },
+          "numPlazas": {
+            "type": "integer",
+            "description": "Número de plazas del evento",
+            "format": "int32",
+            "example": 100
+          },
+          "cancelado": {
+            "type": "boolean",
+            "description": "Indica si el evento ha sido cancelado",
+            "example": false
+          },
+          "categoria": {
+            "type": "string",
+            "description": "Categoría del evento",
+            "example": "Concierto"
+          },
+          "conOcupacion": {
+            "type": "boolean",
+            "description": "Indica si el evento está ocupado",
+            "example": false
+          }
+        },
+        "description": "Evento de la aplicación"
+      }
+    }
+  }
+}

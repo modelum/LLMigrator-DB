@@ -1,0 +1,153 @@
+services:
+  gateway-app:
+    build: ./gateway
+    container_name: gateway-app
+    restart: always
+    ports:
+      - '8090:8090'
+    depends_on:
+      eventos-app:
+        condition: service_started
+      reservas-app:
+        condition: service_started
+      espacios-app:
+        condition: service_started
+      mysql-db:
+        condition: service_healthy
+        restart: true
+      mongo-db:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+  espacios-app:
+    build: ./espacios
+    container_name: espacios-app
+    restart: always
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+  eventos-app:
+    build: ./eventos
+    container_name: eventos-app
+    restart: always
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+  reservas-app:
+    build: ./reservas
+    container_name: reservas-app
+    restart: always
+    depends_on:
+      mongo-db:
+        condition: service_healthy
+        restart: true
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+    env_file:
+      - .env
+
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./.mysql-data:/var/lib/mysql
+      - ./.mysql-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # si quieres usar datos
+      # ./.mysql-init/init.sql:/docker-entrypoint-initdb.d/init-datos.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: practicas
+    networks:
+      - arso-net
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  mongo-db:
+    image: mongo:5.0
+    container_name: mongo-db
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./.mongo-data:/data/db
+      # si quieres usar datos
+      #- ./.mongo-init/init.js:/docker-entrypoint-initdb.d/init.js
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: practicas
+      MONGO_INITDB_DATABASE: arso
+    networks:
+      - arso-net
+    healthcheck:
+      test: ['CMD', 'mongo', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 9081:8081
+    environment:
+      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: practicas
+      ME_CONFIG_MONGODB_URL: mongodb://root:practicas@mongo-db:27017/
+    depends_on:
+      mongo-db:
+        condition: service_healthy
+        restart: true
+    networks:
+      - arso-net
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: arso
+      RABBITMQ_DEFAULT_PASS: practicas
+    volumes:
+      - ./.rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - arso-net
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', 'check_protocol_listener', 'amqp']
+      interval: 15s
+      timeout: 10s
+      retries: 7
+      start_period: 10s
+networks:
+  arso-net:
+    driver: bridge

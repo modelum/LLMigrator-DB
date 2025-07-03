@@ -1,0 +1,3 @@
+CREATE DATABASE eventosdb;
+
+CREATE DATABASE reservasdb;
