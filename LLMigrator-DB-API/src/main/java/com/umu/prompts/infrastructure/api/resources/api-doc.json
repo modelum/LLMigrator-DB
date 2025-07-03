@@ -1,0 +1,665 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Servicio de migración de bases de datos - LLMigrate",
+    "description": " Gestión de migraciones de bases de datos",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/v1/migrations": {
+      "post": {
+        "tags": ["Database-Migration"],
+        "summary": "Migrar Base de Datos",
+        "description": "Realiza la migración de la base de datos. Devuelve un objeto DatabaseMigrationResponseDto en caso de éxito.",
+        "operationId": "migrateDatabase",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DatabaseMigrationRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Error interno en el servidor",
+            "content": {}
+          },
+          "400": {
+            "description": "Petición errónea",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Operación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseMigrationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/code-migrations": {
+      "post": {
+        "tags": ["Code-Migration"],
+        "summary": "Migrar Código",
+        "description": "Realiza la migración del código. Devuelve un objeto CodeMigrationResponseDto en caso de éxito.",
+        "operationId": "migrateCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CodeMigrationRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Error interno en el servidor",
+            "content": {}
+          },
+          "400": {
+            "description": "Petición errónea",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Operación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeMigrationResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/migrations/largeModels": {
+      "get": {
+        "tags": ["Large-Models"],
+        "summary": "Obtener Modelos Grandes Soportados",
+        "description": "Devuelve una lista de modelos grandes soportados para migraciones de código.",
+        "operationId": "getSupportedLargeModels",
+        "responses": {
+          "500": {
+            "description": "Error interno en el servidor",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Operación exitosa",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DatabaseMigrationRequestDto": {
+        "type": "object",
+        "description": "Objeto de solicitud para la migración de la base de datos",
+        "properties": {
+          "sourceDatabaseType": {
+            "type": "string",
+            "description": "Source database type",
+            "enum": [
+              "MySQL",
+              "PostgreSQL",
+              "SQLite",
+              "OracleDB",
+              "MicrosoftSQLServer",
+              "MariaDB",
+              "IBMDB2",
+              "AmazonRDS",
+              "GoogleCloudSQL",
+              "SAPHana",
+              "MongoDB",
+              "CouchDB",
+              "Cassandra",
+              "Redis",
+              "Couchbase",
+              "DynamoDB",
+              "Neo4j",
+              "Riak",
+              "HBase",
+              "Elasticsearch",
+              "InfluxDB",
+              "TimescaleDB",
+              "OpenTSDB",
+              "db4o",
+              "ObjectDB",
+              "GoogleSpanner",
+              "CockroachDB",
+              "TiDB",
+              "Memcached",
+              "BerkeleyDB",
+              "ScyllaDB",
+              "ArangoDB",
+              "OrientDB",
+              "MarkLogic",
+              "GoogleBigtable"
+            ],
+            "example": "SQLite"
+          },
+          "targetDatabaseType": {
+            "type": "string",
+            "description": "Target database type",
+            "enum": [
+              "MySQL",
+              "PostgreSQL",
+              "SQLite",
+              "OracleDB",
+              "MicrosoftSQLServer",
+              "MariaDB",
+              "IBMDB2",
+              "AmazonRDS",
+              "GoogleCloudSQL",
+              "SAPHana",
+              "MongoDB",
+              "CouchDB",
+              "Cassandra",
+              "Redis",
+              "Couchbase",
+              "DynamoDB",
+              "Neo4j",
+              "Riak",
+              "HBase",
+              "Elasticsearch",
+              "InfluxDB",
+              "TimescaleDB",
+              "OpenTSDB",
+              "db4o",
+              "ObjectDB",
+              "GoogleSpanner",
+              "CockroachDB",
+              "TiDB",
+              "Memcached",
+              "BerkeleyDB",
+              "ScyllaDB",
+              "ArangoDB",
+              "OrientDB",
+              "MarkLogic",
+              "GoogleBigtable"
+            ],
+            "example": "PostgreSQL"
+          },
+          "accessRequirements": {
+            "type": "string",
+            "description": "Access requirements for the migration",
+            "example": "Administrator privileges required",
+            "minLength": 1
+          },
+          "databaseSchema": {
+            "type": "string",
+            "description": "Definition of the database schema",
+            "example": "CREATE TABLE ...",
+            "minLength": 1
+          },
+          "databaseDocuments": {
+            "type": "string",
+            "description": "Optional database documentation details",
+            "example": "Documentation about the database structure"
+          },
+          "migrationRequirements": {
+            "type": "string",
+            "description": "Requirements for performing the migration",
+            "example": "Backup the database before migrating",
+            "minLength": 1
+          },
+          "languageLargeModel": {
+            "type": "string",
+            "description": "Language large model for code migration",
+            "enum": [
+              "deepseek/deepseek-r1-0528:free",
+              "google/gemini-2.0-flash-001",
+              "openai/gpt-4o-mini"
+            ],
+            "example": "openai/gpt-4o-mini"
+          }
+        },
+        "required": [
+          "accessRequirements",
+          "databaseSchema",
+          "languageLargeModel",
+          "migrationRequirements",
+          "sourceDatabaseType",
+          "targetDatabaseType"
+        ]
+      },
+      "DatabaseMigrationResponseDto": {
+        "type": "object",
+        "description": "Response DTO for Database Migration",
+        "properties": {
+          "scriptForMigrateSchema": {
+            "type": "string",
+            "description": "Script for migrating the database schema",
+            "example": "ALTER TABLE ..."
+          },
+          "metadataForMigrateSchema": {
+            "type": "string",
+            "description": "Metadata for schema migration",
+            "example": "Additional schema information"
+          },
+          "guidelinesForValidateSchema": {
+            "type": "string",
+            "description": "Guidelines for validating the database schema",
+            "example": "Steps for schema validation"
+          },
+          "scriptForDataMigration": {
+            "type": "string",
+            "description": "Script for migrating the data",
+            "example": "INSERT INTO ..."
+          },
+          "metadataForDataMigration": {
+            "type": "string",
+            "description": "Metadata for data migration",
+            "example": "Additional data migration details"
+          },
+          "scriptForDataValidation": {
+            "type": "string",
+            "description": "Script for data validation",
+            "example": "SELECT COUNT(*) ..."
+          },
+          "metadataForDataValidation": {
+            "type": "string",
+            "description": "Metadata for data validation",
+            "example": "Additional data validation details"
+          }
+        }
+      },
+      "ProblemDetail": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "writeOnly": true
+          }
+        }
+      },
+      "CodeMigrationRequestDto": {
+        "type": "object",
+        "description": "Objeto de solicitud para la migración de código",
+        "properties": {
+          "sourceDatabase": {
+            "type": "string",
+            "description": "Source database type",
+            "enum": [
+              "MySQL",
+              "PostgreSQL",
+              "SQLite",
+              "OracleDB",
+              "MicrosoftSQLServer",
+              "MariaDB",
+              "IBMDB2",
+              "AmazonRDS",
+              "GoogleCloudSQL",
+              "SAPHana",
+              "MongoDB",
+              "CouchDB",
+              "Cassandra",
+              "Redis",
+              "Couchbase",
+              "DynamoDB",
+              "Neo4j",
+              "Riak",
+              "HBase",
+              "Elasticsearch",
+              "InfluxDB",
+              "TimescaleDB",
+              "OpenTSDB",
+              "db4o",
+              "ObjectDB",
+              "GoogleSpanner",
+              "CockroachDB",
+              "TiDB",
+              "Memcached",
+              "BerkeleyDB",
+              "ScyllaDB",
+              "ArangoDB",
+              "OrientDB",
+              "MarkLogic",
+              "GoogleBigtable"
+            ],
+            "example": "SQLite"
+          },
+          "sourceLanguage": {
+            "type": "string",
+            "description": "Source programming language for code migration",
+            "enum": [
+              "Java / JVM",
+              "DOTNET",
+              "JavaScript",
+              "TypeScript",
+              "Python",
+              "Ruby",
+              "Go",
+              "PHP",
+              "Otros"
+            ],
+            "example": "Java"
+          },
+          "targetLanguage": {
+            "type": "string",
+            "description": "Target programming language for code migration",
+            "enum": [
+              "Java / JVM",
+              "DOTNET",
+              "JavaScript",
+              "TypeScript",
+              "Python",
+              "Ruby",
+              "Go",
+              "PHP",
+              "Otros"
+            ],
+            "example": "Kotlin"
+          },
+          "targetDatabase": {
+            "type": "string",
+            "description": "Target database type",
+            "enum": [
+              "MySQL",
+              "PostgreSQL",
+              "SQLite",
+              "OracleDB",
+              "MicrosoftSQLServer",
+              "MariaDB",
+              "IBMDB2",
+              "AmazonRDS",
+              "GoogleCloudSQL",
+              "SAPHana",
+              "MongoDB",
+              "CouchDB",
+              "Cassandra",
+              "Redis",
+              "Couchbase",
+              "DynamoDB",
+              "Neo4j",
+              "Riak",
+              "HBase",
+              "Elasticsearch",
+              "InfluxDB",
+              "TimescaleDB",
+              "OpenTSDB",
+              "db4o",
+              "ObjectDB",
+              "GoogleSpanner",
+              "CockroachDB",
+              "TiDB",
+              "Memcached",
+              "BerkeleyDB",
+              "ScyllaDB",
+              "ArangoDB",
+              "OrientDB",
+              "MarkLogic",
+              "GoogleBigtable"
+            ],
+            "example": "PostgreSQL"
+          },
+          "sourceFramework": {
+            "type": "string",
+            "description": "Source framework for code migration",
+            "enum": [
+              "Spring Data JPA",
+              "Spring Data JDBC",
+              "Spring Data R2DBC",
+              "Spring Data MongoDB",
+              "Spring Data Cassandra",
+              "Spring Data Elasticsearch",
+              "Spring Data Redis",
+              "JOOQ",
+              "MyBatis",
+              "JDBI",
+              "Hibernate ORM",
+              "EclipseLink ORM",
+              "DataNucleus",
+              "ObjectDB",
+              "Quarkus Panache",
+              "Micronaut Data",
+              "JDBC directo",
+              "Entity Framework Core",
+              "NHibernate",
+              "Dapper",
+              "LINQ to SQL",
+              "ADO.NET",
+              "TypeORM",
+              "Sequelize",
+              "MikroORM",
+              "Prisma",
+              "Knex.js",
+              "Objection.js",
+              "Mongoose",
+              "Waterline",
+              "SQLAlchemy",
+              "Peewee",
+              "Tortoise ORM",
+              "Pony ORM",
+              "Django ORM",
+              "MongoEngine",
+              "ODMantic",
+              "Active Record (Rails)",
+              "Sequel (Ruby)",
+              "GORM (Go)",
+              "Ent (Go)",
+              "Beego ORM",
+              "Eloquent (Laravel)",
+              "Doctrine ORM",
+              "CakePHP ORM",
+              "Firebase Firestore SDK",
+              "Supabase Client",
+              "PlanetScale Client",
+              "AWS Amplify DataSource"
+            ],
+            "example": "Spring Data JPA"
+          },
+          "targetFramework": {
+            "type": "string",
+            "description": "Target framework for code migration",
+            "enum": [
+              "Spring Data JPA",
+              "Spring Data JDBC",
+              "Spring Data R2DBC",
+              "Spring Data MongoDB",
+              "Spring Data Cassandra",
+              "Spring Data Elasticsearch",
+              "Spring Data Redis",
+              "JOOQ",
+              "MyBatis",
+              "JDBI",
+              "Hibernate ORM",
+              "EclipseLink ORM",
+              "DataNucleus",
+              "ObjectDB",
+              "Quarkus Panache",
+              "Micronaut Data",
+              "JDBC directo",
+              "Entity Framework Core",
+              "NHibernate",
+              "Dapper",
+              "LINQ to SQL",
+              "ADO.NET",
+              "TypeORM",
+              "Sequelize",
+              "MikroORM",
+              "Prisma",
+              "Knex.js",
+              "Objection.js",
+              "Mongoose",
+              "Waterline",
+              "SQLAlchemy",
+              "Peewee",
+              "Tortoise ORM",
+              "Pony ORM",
+              "Django ORM",
+              "MongoEngine",
+              "ODMantic",
+              "Active Record (Rails)",
+              "Sequel (Ruby)",
+              "GORM (Go)",
+              "Ent (Go)",
+              "Beego ORM",
+              "Eloquent (Laravel)",
+              "Doctrine ORM",
+              "CakePHP ORM",
+              "Firebase Firestore SDK",
+              "Supabase Client",
+              "PlanetScale Client",
+              "AWS Amplify DataSource"
+            ],
+            "example": "MICRONAUT"
+          },
+          "domainModelCode": {
+            "type": "string",
+            "description": "Code of the domain model",
+            "example": "public class User { ... }",
+            "minLength": 1
+          },
+          "repositoryCode": {
+            "type": "string",
+            "description": "Code of the repository",
+            "example": "public interface UserRepository extends JpaRepository\u003CUser, Long\u003E { ... }",
+            "minLength": 1
+          },
+          "customQueriesCode": {
+            "type": "string",
+            "description": "Code for custom queries",
+            "example": "SELECT u FROM User u WHERE u.active = true",
+            "minLength": 1
+          },
+          "functionalRequirements": {
+            "type": "string",
+            "description": "Description of functional requirements",
+            "example": "Pagination, joins, etc.",
+            "minLength": 1
+          },
+          "outputFormat": {
+            "type": "string",
+            "description": "Output format preferences",
+            "example": "Clean Architecture, MVC, Repository Pattern",
+            "minLength": 1
+          },
+          "targetSchema": {
+            "type": "string",
+            "description": "Target schema from the target database for the migration",
+            "example": "CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(100), email VARCHAR(100))",
+            "minLength": 1
+          },
+          "usageExampleCode": {
+            "type": "string",
+            "description": "Example usage code",
+            "example": "public static void main(String[] args) { ... }"
+          },
+          "languageLargeModel": {
+            "type": "string",
+            "description": "Language large model for code migration",
+            "enum": [
+              "deepseek/deepseek-r1-0528:free",
+              "google/gemini-2.0-flash-001",
+              "openai/gpt-4o-mini"
+            ],
+            "example": "openai/gpt-4o-mini"
+          }
+        },
+        "required": [
+          "customQueriesCode",
+          "domainModelCode",
+          "functionalRequirements",
+          "languageLargeModel",
+          "outputFormat",
+          "repositoryCode",
+          "sourceDatabase",
+          "sourceFramework",
+          "sourceLanguage",
+          "targetDatabase",
+          "targetFramework",
+          "targetLanguage",
+          "targetSchema"
+        ]
+      },
+      "CodeMigrationResponseDto": {
+        "type": "object",
+        "description": "Response DTO for Code Migration",
+        "properties": {
+          "migratedDomainAndRepositoryCode": {
+            "type": "string",
+            "description": "Migrated domain and repository code",
+            "example": "public class UserRepository { ... }"
+          },
+          "migratedDomainAndRepositoryCodeExplication": {
+            "type": "string",
+            "description": "Explanation of the migrated domain and repository code",
+            "example": "This code represents the migrated UserRepository class with all necessary methods."
+          },
+          "migratedServiceAndQueriesCode": {
+            "type": "string",
+            "description": "Migrated service and queries code",
+            "example": "public class UserService { ... }"
+          },
+          "migratedServiceAndQueriesCodeExplication": {
+            "type": "string",
+            "description": "Explanation of the migrated service and queries code",
+            "example": "This code represents the migrated UserService class with all necessary methods and queries."
+          }
+        }
+      }
+    }
+  }
+}

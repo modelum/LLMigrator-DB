@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: spring-migration-AI-api-LLMigrate
+
+  ai:
+    openai:
+      base_url: ${OPENAI_BASE_URL:https://openrouter.ai/api}
+      api-key: ${OPENROUTER_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+    openrouter:
+      chat:
+        options:
+          models:
+            - deepseek/deepseek-r1-0528:free
+            - google/gemini-2.0-flash-001
+            - openai/gpt-4o-mini
+#logging:
+#  level:
+#    # Spring MVC
+#    org.springframework.web: DEBUG
+#    # Core Jackson databind
+#    com.fasterxml.jackson.databind: DEBUG
+#    # HTTP message conversion
+#    org.springframework.http.converter.json: DEBUG
