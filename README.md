@@ -27,7 +27,7 @@
 
 ## 📋 Descripción
 
-LLMigrator-DB es una herramienta genérica basada en LLMs para automatizar la migración de bases de datos, la cual ha sido desarrollada como parte del Trabajo Fin de Grado de [Fabián Sola Durán](<(https://github.com/fsoladur)>), realizado en el seno del [grupo ModelUM](https://modelum.github.io/), diseñada para facilitar la migración de bases de datos. Entre los principales requisitos de LLMigrator-DB podemos destacar: el soporte de migraciones homogéneas y heterogéneas, la independencia de SGBD y modelos de datos, y también de LLMs concretos y el soporte de la migración de código (de acceso a datos) además de la migración de esquemas de bases de datos. Esta independencia de la plataforma se ha conseguido mediante el uso de plantillas de prompt para los modelos de datos y SGBD, así como la utilización de una API unificada para acceder a distintos LLMs, como es **OpenRouter**.
+LLMigrator-DB es una herramienta genérica basada en LLMs para automatizar la migración de bases de datos, la cual ha sido desarrollada como parte del [Trabajo Fin de Grado](./TFG_Fabian_Sola.pdf) de [Fabián Sola Durán](<(https://github.com/fsoladur)>), realizado en el seno del [grupo ModelUM](https://modelum.github.io/), diseñada para facilitar la migración de bases de datos. Entre los principales requisitos de LLMigrator-DB podemos destacar: el soporte de migraciones homogéneas y heterogéneas, la independencia de SGBD y modelos de datos, y también de LLMs concretos y el soporte de la migración de código (de acceso a datos) además de la migración de esquemas de bases de datos. Esta independencia de la plataforma se ha conseguido mediante el uso de plantillas de prompt para los modelos de datos y SGBD, así como la utilización de una API unificada para acceder a distintos LLMs, como es **OpenRouter**.
 
 La construcción y uso de LLMigrator-DB ha permitido evaluar la viabilidad de los LLM para realizar migraciones de bases de datos y potenciar la automatización de este proceso por parte de los desarrolladores, facilitando la generación de código y la adaptación de esquemas entre diferentes tecnologías de bases de datos.
 
@@ -173,7 +173,6 @@ Además, se adjuntan los proyectos de Spring Boot generados para cada una de las
 - **Google Gemini 2.0 Flash** (`google/gemini-2.0-flash-001`) - Modelo utilizado para la migración homogénea del microservicio de eventos
 - **OpenAI GPT-4o Mini** (`openai/gpt-4o-mini`) - Modelo utilizado para la migración heterogénea del microservicio de reservas
 - **Deepseek R1 0528** (`deepseek/deepseek-r1-0528:free`) - Modelo utilizado en el TFG como ejemplo para añadir un nuevo LLM en la herramienta de forma sencilla
--
 
 #### Añade un nuevo LLM según tus necesidades
 
