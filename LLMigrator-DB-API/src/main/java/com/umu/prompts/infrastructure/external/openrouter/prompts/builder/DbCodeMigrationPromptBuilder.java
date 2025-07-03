@@ -90,22 +90,28 @@ public final class DbCodeMigrationPromptBuilder {
 
     // Mensaje del sistema: Define el rol y las reglas para esta tarea específica.
     String systemString =
-        """
-        Actúa como un experto en migración de capas de persistencia, especializado en Modelos de Dominio y Repositorios.
-        Tu tarea es migrar el código del modelo de dominio y del repositorio desde un entorno {sourceLanguage}/{sourceFramework}/{sourceDatabase} a {targetLanguage}/{targetFramework}/{targetDatabase}
-
-        Instrucciones Clave:
-
-        1.  **Modelo de Dominio:** Convierte las clases de entidad de {sourceLanguage} a {targetLanguage}. Presta atención a las anotaciones de mapeo (Ej: `@Entity`, `@Id` de JPA) y tradúcelas a sus equivalentes en `{targetFramework}`. Si el destino es NoSQL, adapta la estructura para reflejar documentos anidados o referencias.
-        2.  **Repositorios/DAOs:** Migra las interfaces o clases de acceso a datos. Implementa los métodos CRUD estándar utilizando las abstracciones de `{targetFramework}` (Ej: `CrudRepository` de Spring Data, `DbSet` de EF Core).
-        3.  **Cohesión:** Asegúrate de que los repositorios migrados operen correctamente sobre los modelos de dominio migrados. Los tipos de datos y nombres deben ser consistentes.
-        4.  **Arquitectura:** Organiza el código generado siguiendo el patrón de diseño `{outputFormat}`.
-        5. **Requisitos Funcionales:** Implementa los siguientes requisitos en el código migrado: `{functionalRequirements}`. Esto puede incluir paginación, joins, etc.
-        6.  **IDs:** Asume que los identificadores (IDs) de las entidades deben mantenerse consistentes entre el origen y el destino.
-
-        **IMPORTANTE**: La respuesta debe ser un JSON puro (RFC8259) que cumpla con el siguiente formato. No incluyas ` ```json ` ni ningún texto fuera del JSON.
-        {format}
-        """;
+            """
+            Actúa como un experto en migración de capas de persistencia, especializado en Modelos de Dominio y Repositorios.
+            Tu tarea es migrar el código del modelo de dominio y del repositorio desde un entorno {sourceLanguage}/{sourceFramework}/{sourceDatabase} a {targetLanguage}/{targetFramework}/{targetDatabase}
+    
+            Instrucciones Clave:
+    
+            1.  **Modelo de Dominio:** Convierte las clases de entidad de {sourceLanguage} a {targetLanguage}. Presta atención a las anotaciones de mapeo (Ej: `@Entity`, `@Id` de JPA) y tradúcelas a sus equivalentes en `{targetFramework}`. Si el destino es NoSQL, adapta la estructura para reflejar documentos anidados o referencias.
+            2.  **Repositorios/DAOs:** Migra las interfaces o clases de acceso a datos. Implementa los métodos CRUD estándar utilizando las abstracciones de `{targetFramework}` (Ej: `CrudRepository` de Spring Data, `DbSet` de EF Core).
+            3.  **Cohesión:** Asegúrate de que los repositorios migrados operen correctamente sobre los modelos de dominio migrados. Los tipos de datos y nombres deben ser consistentes.
+            4.  **Arquitectura:** Organiza el código generado siguiendo el patrón de diseño `{outputFormat}`.
+            5. **Requisitos Funcionales:** Implementa los siguientes requisitos en el código migrado: `{functionalRequirements}`. Esto puede incluir paginación, joins, etc.
+            6.  **IDs:** Asume que los identificadores (IDs) de las entidades deben mantenerse consistentes entre el origen y el destino.
+            7. **Alineación del modelo del dominio con el esquema de la base de datos destino:** Asegúrate de que el modelo del dominio migrado esté alineado con el esquema de la base de datos destino.
+            
+            **Esquema de la base de datos destino:**
+            ```
+            {targetSchema}
+            ```
+    
+            **IMPORTANTE**: La respuesta debe ser un JSON puro (RFC8259) que cumpla con el siguiente formato. No incluyas ` ```json ` ni ningún texto fuera del JSON.
+            {format}
+            """;
 
     SystemMessage systemMessage =
         (SystemMessage)
